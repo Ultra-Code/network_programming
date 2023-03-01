@@ -1,5 +1,5 @@
-const Self = @This();
-//socket network programming
+//!socket network programming
+const cnet = @This();
 pub usingnamespace @cImport({
     //sys/types.h — data types
     @cInclude("sys/types.h");
@@ -14,7 +14,7 @@ pub usingnamespace @cImport({
 });
 
 pub const AddressInfo = struct {
-    getaddrinfo_status: @typeInfo(@TypeOf(Self.getaddrinfo)).Fn.return_type.? = undefined,
-    data: Self.addrinfo,
-    serviceinfo: ?*Self.addrinfo = undefined,
+    getaddrinfo_status: @typeInfo(@TypeOf(cnet.getaddrinfo)).Fn.return_type.? = undefined,
+    data: cnet.addrinfo,
+    serviceinfo: ?*cnet.addrinfo = undefined,
 };

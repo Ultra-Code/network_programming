@@ -26,7 +26,7 @@ pub fn main() !void {
 
     address_info.getaddrinfo_status = cnet.getaddrinfo(
         program_arg,
-        "http",
+        "https",
         &address_info.data,
         &address_info.serviceinfo,
     );
@@ -55,7 +55,7 @@ pub fn main() !void {
                 @alignCast(@alignOf(@TypeOf(address_list.?.ai_addr)), address_list.?.ai_addr),
             );
 
-            const ip_str = cnet.inet_ntop(
+            const ip_str: ?[*:0]const u8 = cnet.inet_ntop(
                 address_list.?.ai_family,
                 @ptrCast(*anyopaque, &ipv4.sin_addr),
                 ip_buf[0..],
@@ -63,7 +63,7 @@ pub fn main() !void {
             );
 
             if (ip_str) |ip| {
-                std.debug.print(" {s}: {s}\n", .{ "IPV4", ip[0..cnet.INET_ADDRSTRLEN] });
+                std.debug.print(" {s}: {s}\n", .{ "IPV4", ip });
             } else {
                 std.log.err("{s}", .{cnet.strerror(std.c._errno().*)});
             }
@@ -76,7 +76,7 @@ pub fn main() !void {
                 @alignCast(@alignOf(@TypeOf(address_list.?.ai_addr)), address_list.?.ai_addr),
             );
 
-            const ip_str = cnet.inet_ntop(
+            const ip_str: ?[*:0]const u8 = cnet.inet_ntop(
                 address_list.?.ai_family,
                 @ptrCast(*anyopaque, &ipv6.sin6_addr),
                 ip_buf[0..],
@@ -84,7 +84,7 @@ pub fn main() !void {
             );
 
             if (ip_str) |ip| {
-                std.debug.print(" {s}: {s}\n", .{ "IPV6", ip[0..cnet.INET6_ADDRSTRLEN] });
+                std.debug.print(" {s}: {s}\n", .{ "IPV6", ip });
             } else {
                 std.log.err("{s}", .{cnet.strerror(std.c._errno().*)});
             }
@@ -92,5 +92,4 @@ pub fn main() !void {
     }
 }
 
-test "simple test" {
-}
+test "simple test" {}
