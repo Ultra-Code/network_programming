@@ -3,6 +3,26 @@ const mem = std.mem;
 const cnet = @import("cnet.zig");
 const AddressInfo = cnet.AddressInfo;
 
+const SUCCESS = 0;
+const ERROR = -1;
+
+//creates an endpoint for communication
+fn server(service_info: *cnet.addrinfo) void {
+    const socket_fd = cnet.socket(
+        service_info.ai_family,
+        service_info.ai_socktype,
+        service_info.ai_protocol,
+    );
+    if (socket_fd == ERROR) {
+        std.log.err("socket failed:{s}", .{cnet.strerror(std.c._errno().*)});
+        std.process.exit(3);
+    }
+
+    //assigns the address specified by addr to the socket referenced by
+    //`socket_fd`
+    cnet.bind(socket_fd, service_info.ai_addr, service_info.ai_addrlen);
+}
+
 pub fn main() !void {
     const argv = try std.process.argsAlloc(std.heap.c_allocator);
     if (argv.len != 2) {
