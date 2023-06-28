@@ -72,15 +72,11 @@ pub fn main() !void {
         if (address_list.?.ai_family == cnet.AF_INET) {
             var ip_buf: [cnet.INET_ADDRSTRLEN]u8 = undefined;
 
-            var ipv4: *cnet.sockaddr_in =
-                @ptrCast(
-                *cnet.sockaddr_in,
-                @alignCast(@alignOf(@TypeOf(address_list.?.ai_addr)), address_list.?.ai_addr),
-            );
+            var ipv4: *cnet.sockaddr_in = @ptrCast(@alignCast(address_list.?.ai_addr));
 
             const ip_str: ?[*:0]const u8 = cnet.inet_ntop(
                 address_list.?.ai_family,
-                @ptrCast(*anyopaque, &ipv4.sin_addr),
+                @ptrCast(&ipv4.sin_addr),
                 ip_buf[0..],
                 cnet.INET_ADDRSTRLEN,
             );
@@ -93,15 +89,11 @@ pub fn main() !void {
         } else {
             var ip_buf: [cnet.INET6_ADDRSTRLEN]u8 = undefined;
 
-            var ipv6: *cnet.sockaddr_in6 =
-                @ptrCast(
-                *cnet.sockaddr_in6,
-                @alignCast(@alignOf(@TypeOf(address_list.?.ai_addr)), address_list.?.ai_addr),
-            );
+            var ipv6: *cnet.sockaddr_in6 = @ptrCast(@alignCast(address_list.?.ai_addr));
 
             const ip_str: ?[*:0]const u8 = cnet.inet_ntop(
                 address_list.?.ai_family,
-                @ptrCast(*anyopaque, &ipv6.sin6_addr),
+                @ptrCast(&ipv6.sin6_addr),
                 ip_buf[0..],
                 cnet.INET6_ADDRSTRLEN,
             );
